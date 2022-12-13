@@ -1,0 +1,15 @@
+sh hive --service hiveserver2
+sh beeline -u jdbc:hive2://hadoop01:10000/gy -n root
+create external table product(id int,name string,prince double) row format delimited field terminated by ' ' location '/products'
+select * from product p left join orders o on  p.id=o.proid;
+select * from product p left semi join orders o on  p.id=o.proid;
+select * from product p inner join orders o on  p.id=o.proid;
+select * from product p full outer join orders o on  p.id=o.proid;
+
+Serde:是hive提供的一套用于序列化和和反序列化机制
+create external table tomcat(ip string,logdate string,zone string,request string,resource string,protocol string,stateid int) row format serde 'org.apache.hadoop.hive.serde2.RegexSerDe' with serdeproperties("input.regex"="(.*) \-\- \\[(.*) (.*)\\] \"(.*) (.*) (.*)\" ([0-9]+) \-") location '/log';
+建立索引表
+建立索引是为了提高效率
+create index o_index on table orders(ordid) as 'org.apache.hadoop.hive.ql.index.compact.CompactIndexHandler' with deferred rebuild in table order_index;
+alter index o_index on orders rebuild;
+drop index o_index on table orders;
