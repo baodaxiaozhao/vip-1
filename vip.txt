@@ -1,0 +1,118 @@
+git add Hello.java
+git status
+git commit -m "second commit"
+git status
+git push -u origin main
+
+git init --初始化仓库
+git status --显示git仓库的状态，
+commit：记录工作树中所有文件的当前状态
+git add --向暂存区中添加文件
+如果想把文件移除暂存区，可以使用git rm --cached<file>
+
+保存仓库历史记录：git commit -m "Firstcommit"可以将缓存区中的文件实际保存到仓库的历史记录中。通过这些记录，我们可以在工作树中恢复文件
+其中-m 称作提交信息，是对提交的概述
+
+git log可以查看以往仓库中提交的日志
+可以查看什么人在什么时候
+git log --pretty=short
+git log "文件名"
+git log -p 文件名/目录名
+ 
+只显示指定目录或文件的日志
+显示文件的改动
+git diff 查看工作树/暂存区/最新提交之间的差别
+执行git add之后，工作树和暂存区的状态并无差别，结果什么都不会显示
+git diff HEAD（在执行git commit之前，要执行下git diff HEAD）
+
+分支操作
+master分支是git默认创建的分支，基本上所有的开发都是以master为中心进行的
+可以在不同分支中，同时进行完全不同的作业，等各个分支的作业完成之后，在与master分支进行合并
+使用分支可以让多人同时高效的进行并行开发
+git branch
+将分支名的列表显示，可以确认当前所在分支
+*master
+master左边的*，表示我们当前所在的分支
+创建和切换分支
+git checkout -b 分支名
+执行下面两条命令可以达到同样的效果
+git branch 分支名
+git checkout 分支名00
+不断地对一个分支进行提交操作，称之为培育分支
+
+如果想切换回master分支，可以执行git checkout master
+
+特性分支
+Topic
+集中实现单一特性，除此之外，不进行任何作业的分支
+日常开发中，会保留一个稳定分支做发布用，通常是master分支
+
+主干分支
+是特性分支的原点，也就是合并的终点
+master
+Tag创建版本信息，管理多个版本发布
+
+合并分支
+git merge
+想要实现合并分支到主干分支master中，首先切换到master分支
+
+git checkout master
+为了在历史记录中明确记录本次分支合并，我们要创建合并提交，参数 --no-ff
+git merge --no-ff frature-A
+
+
+以图表形式查看分支
+git log --graph
+
+更改提交操作
+git可以灵活操作历史版本
+git reset --hard 哈希值
+
+创建git-B分支
+git checkout -b fix-B
+echo "--fix-B" >> readme.txt
+git add .
+git commit -m "fix-B"
+git reflog#查看操作日志，可以看到所有git命令执行记录，但是不要用git的GC，可以使用git reglot恢复到原先的状态
+git checkout master
+git reset --hard 哈希值
+
+消除冲突
+合并fix-B
+
+修改提交信息
+git commit --amend
+
+推送至远程仓库
+添加远程仓库
+git remote add origin https://github.com/baodaxiaozhao/git-note.git
+推送至远程仓库
+推送至master分支
+git push -u origin master -u在推送的同时将origin仓库的master分支设置为本地仓库当前分支的上游，添加了这个参数，在将来我们运行git pull命令的时候（从仓库获取内容），本地仓库的这个分支就可以直接从origin的master分支获取内容，
+
+推送至master以外的分支
+创建新的分支
+git checkout -b feature-B
+git push -u origin feature-B
+可以在远程仓库刷新后，查看新增分支
+
+从远程仓库获取
+git clone https://github.com/baodaxiaozhao/git-note.git
+cd git-note
+git branch -a #可以查看当前分支的相关信息 -a参数可以同时显示本地仓库和远程仓库的分支信息
+获取远程的其他分支
+git checkout -b feature-B origin/feature-B
+git branch -a
+feature-B:是本地仓库中新建分支的名字，与远程分支保持同名，新建分支后面是获取获取来源的分支名称
+origin/feature-B：以名为origin的仓库的feature-B分支来源，在本地仓库创建feature-B分支
+向本地的feature-B 分支提交
+echo "hello world" >> world.txt
+git add .
+git commit -am "add feature-B"
+git push
+
+获取最新的远程仓库分支
+git pull origin feature-B
+
+如果两个人同时修改了同一部分源代码，push的时候很容易发生冲突
+多名开发者在同一个分支进行作业时，为了减少冲突发生的情况，建议更频繁的进行push和pull操作
