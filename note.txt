@@ -13,3 +13,6 @@ create external table tomcat(ip string,logdate string,zone string,request string
 create index o_index on table orders(ordid) as 'org.apache.hadoop.hive.ql.index.compact.CompactIndexHandler' with deferred rebuild in table order_index;
 alter index o_index on orders rebuild;
 drop index o_index on table orders;
+
+
+修改文件
